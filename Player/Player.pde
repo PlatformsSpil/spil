@@ -1,3 +1,5 @@
+//skrevet af Victor V. Tronier & Linus Emil Hjorth
+
 class Player {
 
 
