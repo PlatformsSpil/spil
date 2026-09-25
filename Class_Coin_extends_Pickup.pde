@@ -1,3 +1,5 @@
+//kristoffer (og johan)
+
 class Coin extends Pickup {
   
   
@@ -6,9 +8,12 @@ class Coin extends Pickup {
     super(pos);
     
   }
-
   
-  void drawcoin() {
+//mangler et pickup system
+  if (keyPickup == true)
+    collectedKey   ++
+  
+  void drawCoin() {
     circle(position.x, position.y, 20);
   }
 }
