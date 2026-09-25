@@ -15,4 +15,20 @@ class Platform {
     fill(0);
     rect(position.x, position.y, width, height);
   }
+  
+  PVector getPosition(){
+  return position;
+  }
+  
+  float getWidth(){
+  return width;
+  }
+  
+  float getHeight(){
+  return height;
+  }
+  
+  PVector getVelocity(){
+  return velocity;
+  }
 }

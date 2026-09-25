@@ -1,20 +1,11 @@
 class Player {
-
-
   int liv;
-
   PVector position;
-
   PVector velocity;
-
   boolean grounded;
-
   int energi;
-
   float size;
-
   PVector jumpSpeed;
-
   PVector runSpeed;
 
   Player() {
@@ -83,16 +74,14 @@ class Player {
   void setEnergi(int E) {
     energi = energi + E;
   }
-  void setSize(float S){
-  size = size + S;
-  
+  void setSize(float S) {
+    size = size + S;
   }
-  
-   void setJumpSpeed(PVector J) {
+
+  void setJumpSpeed(PVector J) {
     jumpSpeed = J.copy();
-  
-}
- void setRunSpeed(PVector R) {
+  }
+  void setRunSpeed(PVector R) {
     runSpeed = R.copy();
- }
- 
+  }
+}
