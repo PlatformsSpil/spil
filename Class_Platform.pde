@@ -1,3 +1,5 @@
+//Lasse og Mikkel
+
 class Platform {
   PVector position;
   float width;
