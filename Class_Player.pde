@@ -48,7 +48,14 @@ class Player {
   void displayPlayer() {
     // OPGAVE 4: Vælg hvilken figur (frameIndex) der skal vises: 1 når spilleren bevæger sig mod højre,
     // 2 når han bevæger sig mod venstre, og 0 når han står stille.
-
+if (velocity.x > 0) {
+    frameIndex = 1;
+  } else if (velocity.x < 0) {
+    frameIndex = 2;
+  } else {
+    frameIndex = 0;
+  }
+   
     PImage f = frames[frameIndex];
     imageMode(CENTER); // position er midten af figuren
     //image(f, position.x, position.y, f.width * scale, f.height * scale);
@@ -68,7 +75,25 @@ class Player {
     // Nulstil først den vandrette fart, og brug så keyLeft, keyRight (sættes i spil.pde)
     // og runSpeed til at sætte velocity.x.
     // Spørgsmål: hvad sker der med din løsning, hvis begge taster holdes nede?
+  }
+  void keyPressed(){
+ if (key == 'a' || key == 'A'){
+    playerHastighedX = -5;
+  }
+  if (key == 'd'||key == 'D'){
+    playerHastighedX = 5;
+  }
+if (key == 'w'||key == 'W'){
+    playerHastighedY = -12;
+    grounded = false;
+  }
+  }
 
+}
+
+}
+ 
+   
     // OPGAVE 6: Hvis hop-tasten er trykket ned OG spilleren står på noget, skal han hoppe:
     // sæt den lodrette fart ud fra jumpSpeed (husk at op er negativ y i Processing),
     // og husk at han nu ikke længere står på noget.
