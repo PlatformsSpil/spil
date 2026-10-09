@@ -41,6 +41,7 @@ class Level {
     // OPGAVE 17: Gå én bane op, hvis der er flere baner (se maxLevel).
     // Returner true hvis der var en bane mere, og false hvis det var sidste bane.
     if (level < maxLevel) {
+      level++;
       return true;
     } else {
       return false;
@@ -85,29 +86,55 @@ class Level {
     // OPGAVE 19: Læs alle platforme fra json-filen (nøglen hedder "platform") og tilføj dem til
     // listen platforms. Hver platform er 80 bred, 15 høj og står stille.
     // Hint: åbn level1.json og se hvordan en platform ser ud.
+    /*JSONArray platformArray = json.getJSONArray("platform");
+     for (int i = 0; i < platformArray.size(); i++) {
+     JSONObject p = platformArray.getJSONObject(i);
+     PVector pos = new PVector(p.getFloat("x"), p.getFloat("y"));
+     platforms.add(new Platform(pos, 80, 15, new PVector(0, 0)));
+     
+     }*/
     JSONArray platformArray = json.getJSONArray("platform");
     for (int i = 0; i < platformArray.size(); i++) {
       JSONObject p = platformArray.getJSONObject(i);
       PVector pos = new PVector(p.getFloat("x"), p.getFloat("y"));
-      platforms.add(new Platform(pos, 80, 15, new PVector(0, 0)));
+      String type = p.getString("type", "");
 
-      // pickups (coin, key, battery)
-      JSONArray pickupArray = json.getJSONArray("pickup");
-      for (int i = 0; i < pickupArray.size(); i++) {
-        JSONObject p = pickupArray.getJSONObject(i);
-        PVector pos = new PVector(p.getFloat("x"), p.getFloat("y"));
-        String type = p.getString("type");
+      if (type.equals("moving")) {
+        PVector v = new PVector(0, 0);
+        float minX = pos.x, maxX = pos.x;
+        float minY = pos.y, maxY = pos.y;
 
-        if (type.equals("coin")) {
-          pickUps.add(new Coin(pos));
-        } else if (type.equals("key")) {
-          pickUps.add(new Key(pos));
-        } else if (type.equals("battery")) {
-          pickUps.add(new Battery(pos));
-        } else {
-          //pickUps.add(new Pickup(pos));
-          println("Error reading json");
+        if (p.hasKey("minX")) {
+          minX = p.getFloat("minX");
+          maxX = p.getFloat("maxX");
+          v.x = 1.5;
         }
+        if (p.hasKey("minY")) {
+          minY = p.getFloat("minY");
+          maxY = p.getFloat("maxY");
+          v.y = 1.5;
+        }
+        platforms.add(new MovingPlatform(pos, 80, 15, v, minX, maxX, minY, maxY));
+      } else {
+        platforms.add(new Platform(pos, 80, 15, new PVector(0, 0)));
+      }
+    }
+
+    // pickups (coin, key, battery)
+    JSONArray pickupArray = json.getJSONArray("pickup");
+    for (int i = 0; i < pickupArray.size(); i++) {
+      JSONObject p = pickupArray.getJSONObject(i);
+      PVector pos = new PVector(p.getFloat("x"), p.getFloat("y"));
+      String type = p.getString("type");
+
+      if (type.equals("coin")) {
+        pickUps.add(new Coin(pos));
+      } else if (type.equals("key")) {
+        pickUps.add(new Key(pos));
+      } else if (type.equals("battery")) {
+        pickUps.add(new Battery(pos));
+      } else {
+        println("Error reading json");
       }
     }
   }
