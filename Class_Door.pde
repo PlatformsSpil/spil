@@ -2,7 +2,7 @@
 
 class Door {
   PVector position;
-  float doorWidth; 
+  float doorWidth;
   float doorHeight;
 
   // Konstruktør
@@ -10,7 +10,7 @@ class Door {
     position = pos.copy();
 
     // Dørens størrelse afhænger af canvasets størrelse
-    
+
     // i har to konstanter i kan bruge, men de hedder det samme som i har kaldt jeres variabler - det bliver lidt bøvlet.
     //width = gm.canvasWidth * 0.05;
     //height = gm.canvasHeight * 0.15;
@@ -22,13 +22,16 @@ class Door {
 
   // rører spilleren døren?
   boolean touches(Player p) {
-    // OPGAVE 16: Returner true hvis spillerens position er inde i dørens rektangel, ellers false.
-    // Hint: dørens position er rektanglets øverste venstre hjørne.
+    if (p.position.dist(position)<10) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   // Tegner døren
   void drawDoor() {
-    fill(120); 
+    fill(120);
     rect(position.x, position.y, doorWidth, doorHeight);
     noFill();
   }
