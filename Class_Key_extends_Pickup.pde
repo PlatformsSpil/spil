@@ -8,7 +8,7 @@ class Key extends Pickup {
     img = loadImage("Key.png");
     id = "key";
   }
-  void.collect(player p) {
+  void collect(Player p) {
     p.keys++;
   }
   // OPGAVE 10: Pickup har en tom metode collect(Player p). Overskriv den her, så spilleren

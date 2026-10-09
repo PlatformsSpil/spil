@@ -19,6 +19,9 @@ class Platform {
     fill(0);
     rect(position.x, position.y, platformWidth, height);
   }
+  void update() {
+    //tom fordi en almindelig platform står stille
+  }
 
   PVector getPosition() {
     return position;

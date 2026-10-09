@@ -53,7 +53,9 @@ class Pickup {
   }
 
   boolean touches(Player p) {
-    if (position.dist(p.position) < 10) {
+    float spillerRadius = p.frames[0].width * p.scale / 2;
+
+    if (!pickedUp && position.dist(p.position) < (spillerRadius + radius()) * 0.5) {
       return true;
     } else {
       return false;

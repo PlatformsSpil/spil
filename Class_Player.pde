@@ -75,127 +75,137 @@ class Player {
     // Nulstil først den vandrette fart, og brug så keyLeft, keyRight (sættes i spil.pde)
     // og runSpeed til at sætte velocity.x.
     // Spørgsmål: hvad sker der med din løsning, hvis begge taster holdes nede?
-  }
-  void keyPressed() {
-    if (key == 'a' || key == 'A') {
-      playerHastighedX = -5;
+    velocity.x = 0;
+    if (keyLeft && !keyRight) {
+      velocity.x = -runSpeed.x;
+    } else if (keyRight && !keyLeft) {
+      velocity.x = runSpeed.x;
     }
-    if (key == 'd'||key == 'D') {
-      playerHastighedX = 5;
-    }
-    if (key == 'w'||key == 'W') {
-      playerHastighedY = -12;
+    // OPGAVE 6: Hvis hop-tasten er trykket ned OG spilleren står på noget, skal han hoppe:
+    // sæt den lodrette fart ud fra jumpSpeed (husk at op er negativ y i Processing),
+    // og husk at han nu ikke længere står på noget.
+
+    if (keyJump && grounded) {
+      velocity.y = -jumpSpeed.y;
       grounded = false;
     }
+    velocity.y += gravity;
+
+    float halvH = frames[0].height * scale / 2;
+    float halvB = frames[0].width * scale / 2 * 0.4; // kun fødderne, ikke hele billedet
+
+    float gammelBund = position.y + halvH; // fødder før bevægelse
+    position.add(velocity);
+    float nyBund = position.y + halvH;     // fødder efter bevægelse
+
+    grounded = false; // antag han er i luften, indtil vi finder noget han står på
+
+    for (Platform pl : platforms) {
+      float top = pl.position.y;
+      float forrigeTop = top - pl.velocity.y; // hvor toppen var sidste frame
+
+      boolean overlapperVandret = position.x + halvB > pl.position.x
+        && position.x - halvB < pl.position.x + pl.platformWidth;
+
+      if (overlapperVandret && velocity.y >= 0
+        && gammelBund <= forrigeTop + 1 && nyBund >= top) {
+        position.y = top - halvH;  // stil ham oven på
+        velocity.y = 0;
+        grounded = true;
+        position.x += pl.velocity.x; // følg med hvis platformen bevæger sig
+      }
+    }
+
+    // jorden i bunden, så han ikke falder ud af skærmen
+    if (nyBund >= groundY) {
+      position.y = groundY - halvH;
+      velocity.y = 0;
+      grounded = true;
+    }
   }
-}
+  /*void keyPressed() {
+   if (key == 'a' || key == 'A') {
+   playerHastighedX = -5;
+   }
+   if (key == 'd'||key == 'D') {
+   playerHastighedX = 5;
+   }
+   if (key == 'w'||key == 'W') {
+   playerHastighedY = -12;
+   grounded = false;
+   }
+   }*/
 
 
-// OPGAVE 6: Hvis hop-tasten er trykket ned OG spilleren står på noget, skal han hoppe:
-// sæt den lodrette fart ud fra jumpSpeed (husk at op er negativ y i Processing),
-// og husk at han nu ikke længere står på noget.
 
-velocity.y += gravity;
 
-float halvH = frames[0].height * scale / 2;
-float halvB = frames[0].width * scale / 2 * 0.4; // kun fødderne, ikke hele billedet
 
-float gammelBund = position.y + halvH; // fødder før bevægelse
-position.add(velocity);
-float nyBund = position.y + halvH;     // fødder efter bevægelse
-
-grounded = false; // antag han er i luften, indtil vi finder noget han står på
-
-for (Platform pl : platforms) {
-  float top = pl.position.y;
-  float forrigeTop = top - pl.velocity.y; // hvor toppen var sidste frame
-
-  boolean overlapperVandret = position.x + halvB > pl.position.x
-    && position.x - halvB < pl.position.x + pl.platformWidth;
-
-  if (overlapperVandret && velocity.y >= 0
-    && gammelBund <= forrigeTop + 1 && nyBund >= top) {
-    position.y = top - halvH;  // stil ham oven på
-    velocity.y = 0;
-    grounded = true;
-    position.x += pl.velocity.x; // følg med hvis platformen bevæger sig
+  int getliv () {
+    return liv;
   }
-}
-
-// jorden i bunden, så han ikke falder ud af skærmen
-if (nyBund >= groundY) {
-  position.y = groundY - halvH;
-  velocity.y = 0;
-  grounded = true;
-}
 
 
-int getliv () {
-  return liv;
-}
+  PVector getPosition() {
+    return position;
+  }
 
 
-PVector getPosition() {
-  return position;
-}
+  PVector getVelocity() {
+    return velocity;
+  }
+
+  boolean getGrounded() {
+    return grounded;
+  }
+
+  int getEnergi() {
+    return energi;
+  }
+
+  float getSize() {
+    return size;
+  }
+
+  PVector getJumpSpeed() {
+    return jumpSpeed;
+  }
+  PVector getRunSpeed() {
+    return runSpeed;
+  }
+
+  void setLiv(int L) {
+    liv = liv + L;
+  }
+
+  void setPosition(PVector p) {
+    position = p.copy();
+  }
+
+  // jeg har rettet til to int værdier for at gøre det lettere i funktionskaldet
+  void setVelocity(int x, int y) {
+    velocity = new PVector(x, y);
+  }
 
 
-PVector getVelocity() {
-  return velocity;
-}
+  void setGrounded(boolean G) {
+    grounded = G;
+  }
+  void setEnergi(int E) {
+    energi = energi + E;
+  }
+  void setSize(float S) {
+    size = size + S;
+  }
 
-boolean getGrounded() {
-  return grounded;
-}
+  void setJumpSpeed(PVector J) {
+    jumpSpeed = J.copy();
+  }
 
-int getEnergi() {
-  return energi;
-}
+  void setRunSpeed(PVector r) {
+    runSpeed = r.copy();
+  }
 
-float getSize() {
-  return size;
-}
-
-PVector getJumpSpeed() {
-  return jumpSpeed;
-}
-PVector getRunSpeed() {
-  return runSpeed;
-}
-
-void setLiv(int L) {
-  liv = liv + L;
-}
-
-void setPosition(PVector p) {
-  position = p.copy();
-}
-
-// jeg har rettet til to int værdier for at gøre det lettere i funktionskaldet
-void setVelocity(int x, int y) {
-  velocity = new PVector(x, y);
-}
-
-
-void setGrounded(boolean G) {
-  grounded = G;
-}
-void setEnergi(int E) {
-  energi = energi + E;
-}
-void setSize(float S) {
-  size = size + S;
-}
-
-void setJumpSpeed(PVector J) {
-  jumpSpeed = J.copy();
-}
-
-void setRunSpeed(PVector r) {
-  runSpeed = r.copy();
-}
-
-void setKeys(int k) {
-  keys=k;
-}
+  void setKeys(int k) {
+    keys=k;
+  }
 }

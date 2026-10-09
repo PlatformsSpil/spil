@@ -22,7 +22,11 @@ class Door {
 
   // rører spilleren døren?
   boolean touches(Player p) {
-    if (p.position.dist(position)<10) {
+    // dørens midte (position er hjørnet)
+    float midtX = position.x + doorWidth / 2;
+    float midtY = position.y + doorHeight / 2;
+
+    if (dist(midtX, midtY, p.position.x, p.position.y) < 30) {
       return true;
     } else {
       return false;

@@ -53,12 +53,27 @@ class Enemy {
     // OPGAVE 20: Robotten skal begynde at jagte (chasing), når spilleren er tættere på end seeRange,
     // og give op, når spilleren er længere væk end loseRange.
     // Spørgsmål: hvorfor bruger vi to forskellige afstande i stedet for kun én?
+    if (!chasing && afstand < seeRange) {
+      chasing = true;
+    }
+
+    if (chasing && afstand > loseRange) {
+      chasing = false;
+    }
 
     if (chasing) {
       // OPGAVE 21: Sæt direction så robotten går mod spilleren: 1 = højre, -1 = venstre og 0 = stå stille,
       // når den er (næsten) lige under eller over spilleren. Sæt derefter velocity.x ud fra
       // direction og chaseSpeed.
       // Spørgsmål: hvad sker der, hvis du ikke har "stå stille"-tilfældet?
+      if (p.position.x > position.x + 5) {
+        direction = 1;
+      } else if (p.position.x < position.x - 5) {
+        direction = -1;
+      } else {
+        direction = 0;
+      }
+      velocity.x = direction * chaseSpeed;
     } else {
       // gå frem og tilbage mellem minX og maxX
       if (direction == 0) direction = 1;
@@ -128,6 +143,11 @@ class Enemy {
   // så han ikke står og venter ved spawn-punktet
   void reset() {
     // OPGAVE 22: Sæt robotten tilbage til der hvor den startede, uden fart, og så den ikke jagter længere.
+    position = startPosition.copy();
+    velocity = new PVector(0, 0);
+    chasing = false;
+    direction = 1;
+    standingOn = null;
   }
 
   // rører robotten spilleren?
